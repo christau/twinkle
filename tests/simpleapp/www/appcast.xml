@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle"  xmlns:dc="http://purl.org/dc/elements/1.1/">
+   <channel>
+      <title>Twinkle Test's Changelog</title>
+      <link>http://www.barrysoft.it/twinkle/simpleapp/appcast.xml</link>
+      <description>Most recent changes with links to updates.</description>
+      <language>en</language>
+         <item>
+            <title>Twinkle Test Version 0.0.1</title>
+						<sparkle:releaseNotesLink>
+							http://www.barrysoft.it/twinkle/simpleapp/changelogs/0024.html
+						</sparkle:releaseNotesLink>
+						<!--<sparkle:releaseNotesLink>
+							http://www.adium.im/changelogs/1.4.1.html
+						</sparkle:releaseNotesLink>-->
+            <pubDate>Di, 25 Jun 2013 12:05:56 +0200</pubDate>
+            <enclosure url="http://www.barrysoft.it/twinkle/simpleapp/dist/twinkletest.zip" sparkle:version="0024" sparkle:shortVersionString="0.0.1" length="1345993" type="application/octet-stream" sparkle:dsaSignature="Enter pass phrase for /Users/tiger/projects/twinkle/tests/simpleapp/../../resources/dsa_priv.pem:
+User interface error
+unable to load key file
+2331:error:0906A068:PEM routines:PEM_do_header:bad password read:/SourceCache/OpenSSL098/OpenSSL098-47/src/crypto/pem/pem_lib.c:406:" sparkle:md5Sum="a5f67d7eedde8f9402d56c6d076d8eb6"/>
+         </item>
+   </channel>
+</rss>
