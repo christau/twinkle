@@ -13,7 +13,7 @@ import barrysoft.options.Options;
 import barrysoft.twinkle.UpdateException;
 import barrysoft.twinkle.UpdateRequest;
 import barrysoft.twinkle.UpdateVersion;
-import barrysoft.twinkle.view.gui.UpdateAvailableDialogNG;
+import barrysoft.twinkle.view.gui.UpdateAvailableDialog;
 import barrysoft.twinkle.view.gui.UpdateProgressDialog;
 
 /**
@@ -30,7 +30,7 @@ public class UpdaterViewSwing implements UpdaterView
 	private final GUIEventsDispatcher<UpdaterEventType> dispatcher =
 		new GUIEventsDispatcher<UpdaterEventType>();
 
-	private final UpdateAvailableDialogNG 	updateAvailableDialog;
+	private final UpdateAvailableDialog 	updateAvailableDialog;
 	private final UpdateProgressDialog 		updateProgressDialog;
 	
 	private final Options					updateOptions;
@@ -85,7 +85,7 @@ public class UpdaterViewSwing implements UpdaterView
 	public UpdaterViewSwing(Options updateOptions)
 	{
 		this.updateOptions = updateOptions;
-		this.updateAvailableDialog = new UpdateAvailableDialogNG(installAction, skipVersionAction);
+		this.updateAvailableDialog = new UpdateAvailableDialog(installAction, skipVersionAction);
 		this.updateProgressDialog = new UpdateProgressDialog(cancelUpdateAction);
 		
 		if (!updateOptions.getOptionValue("updater.auto", Boolean.class, false))
