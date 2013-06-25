@@ -1,124 +1,92 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package barrysoft.twinkle.view.gui;
 
 import java.awt.AWTEvent;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import javax.swing.Action;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
 
 import barrysoft.gui.GUIEvent;
-import barrysoft.resources.ResourcesManager;
 import barrysoft.twinkle.UpdateRequest;
 import barrysoft.twinkle.UpdateVersion;
 import barrysoft.twinkle.view.UpdaterEventType;
 
-import net.miginfocom.swing.MigLayout;
-
-public class UpdateAvailableDialog extends JDialog 
+/**
+ * 
+ * @author tiger
+ */
+public class UpdateAvailableDialog extends javax.swing.JDialog
 {
-	private static final long serialVersionUID = -7287483142094325248L;
-	
-	private static final Dimension MIN_SIZE = new Dimension(600, 400);
-
-	private final JLabel		icon = new JLabel();
-	private final JLabel		subtitle = new JLabel();
-	private final JLabel		versionInfo = new JLabel();
-	private final JTextPane 	releaseNotes = new JTextPane();
-	private final JCheckBox		automaticallyDownload = new JCheckBox();	
-	
 	private UpdateVersion version;
 	private UpdateRequest source;
-	
+
+	/**
+	 * Creates new form UpdateAvailableDialog
+	 */
+	public UpdateAvailableDialog(java.awt.Frame parent, boolean modal)
+	{
+		super(parent, modal);
+		initComponents();
+	}
+
 	public UpdateAvailableDialog(Action install, Action skipVersion)
 	{
-		//TODO: Localization
-		
-		setMinimumSize(MIN_SIZE);
-		setTitle("Software Update");
+		initComponents();
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		
+
 		enableEvents(GUIEvent.EVENT_ID);
-		
+
 		releaseNotes.setContentType("text/html");
 		releaseNotes.setEditable(false);
 		releaseNotes.setOpaque(true);
 		releaseNotes.setBackground(Color.white);
-		
-//		icon.setIcon(new ImageIcon(ResourcesManager.getResources().
-//				getIconURL("software-update-available")));
-		
-		JPanel contentPanel = new JPanel(new MigLayout("fill"));
-		
-		JPanel topPanel = new JPanel(new MigLayout("insets 0"));
-		
-		topPanel.add(subtitle, "width 100%!, gaptop 10, wrap");
-		
-		topPanel.add(versionInfo, "width 100%!, wrap");
-		 
-		topPanel.add(new JLabel("<html><b><small>Release notes:</small></b></html>"),
-				"width 100%!, gaptop 10, wrap");
-		
-		JPanel bottomPanel = new JPanel(new MigLayout("fill, insets 0"));
-	
-		automaticallyDownload.setText("Automatically download and install updates next time");
-		
 		automaticallyDownload.setSelected(false);
-				
-		bottomPanel.add(automaticallyDownload,"gap 0 0 10 10, spanx 2, wrap");
-		
-		JButton skipVersionButton = new JButton(skipVersion);
-		skipVersionButton.addActionListener(new ActionListener() 
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				dispose();
-			}
-		});
-		
-		bottomPanel.add(skipVersionButton, "align left");
-		
-		JButton remaindLaterButton = new JButton("Remind me later");
-		remaindLaterButton.addActionListener(new ActionListener() 
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				dispose();
-			}
-		});
-		
-		bottomPanel.add(remaindLaterButton, "align right");
-		
-		bottomPanel.add(new JButton(install), "align right, tag ok, wrap");
-		
-		contentPanel.add(topPanel, "width 100%-20px!, gap 10 10, dock north");
-		
-		contentPanel.add(new JScrollPane(releaseNotes), 
-				"dock center, grow, width 100%-20px!, height 250px, " +
-				"gap 10 10, wrap");
-		
-		contentPanel.add(bottomPanel, "width 100%-20px!, gap 10 10, dock south");
-		
-		getContentPane().setLayout(new MigLayout("fill"));
-		
-		getContentPane().add(icon, "dock west, width 48px!, height 48px!, aligny top, gap 10 10 10");
-		getContentPane().add(contentPanel, "dock center");
-		
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		
-		pack();
+
+		skipVersionButton.setAction(skipVersion);
+		installButton.setAction(install);
 	}
-	
+
+	public void setUpdateVersion(UpdateVersion version, UpdateRequest source)
+	{
+		this.version = version;
+		this.source = source;
+
+		subtitle.setText(String.format("<html><b>Eine neue Version von %s ist Verf&uuml;gbar!</b></html>", source.getApplicationInfo().getSoftwareName()));
+
+		String newVersion;
+		String currentVersion = source.getApplicationInfo().getVersion();
+
+		if (version.getShortVersion() == null)
+		{
+			newVersion = version.getVersion();
+		}
+		else
+		{
+			newVersion = version.getShortVersion() + " (" + version.getVersion() + ")";
+			currentVersion += " (" + source.getComparableVersion() + ")";
+		}
+
+		versionInfo.setText(String.format("<html>%s %s ist Verf&uuml;gbar; Aktuelle Version ist %s.<br>Willst Du die Sofware Aktualisieren?</html>", source.getApplicationInfo().getSoftwareName(), newVersion, currentVersion));
+
+		try
+		{
+			releaseNotes.setPage(version.getReleaseNotesLink());
+		}catch (IOException e)
+		{
+			releaseNotes.setText("<html><h1>Fehler beim &Ouml;ffnen der Seite</h1></html>");
+		}
+	}
+
+	public boolean isAlwaysDownload()
+	{
+		return automaticallyDownload.isSelected();
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void processEvent(AWTEvent event)
@@ -126,78 +94,42 @@ public class UpdateAvailableDialog extends JDialog
 		if (event instanceof GUIEvent)
 		{
 			GUIEvent<UpdaterEventType> ue = (GUIEvent<UpdaterEventType>)event;
-			
-			switch(ue.getType()) {
-			case NEW_VERSION_FOUND:				
-				UpdateVersion version = ue.getDataItem(0, UpdateVersion.class);
-				UpdateRequest source = ue.getDataItem(1, UpdateRequest.class);
-				
-				setUpdateVersion(version, source);
+
+			switch(ue.getType())
+			{
+				case NEW_VERSION_FOUND:
+					UpdateVersion version = ue.getDataItem(0, UpdateVersion.class);
+					UpdateRequest source = ue.getDataItem(1, UpdateRequest.class);
+
+					setUpdateVersion(version, source);
 				break;
-				
-			case CHECKING_COMPLETED:
-				setVisible(true);
+
+				case CHECKING_COMPLETED:
+					setVisible(true);
 				break;
-				
-			case DOWNLOAD_STARTED:
-				setVisible(false);
-				dispose();
+
+				case DOWNLOAD_STARTED:
+					setVisible(false);
+					dispose();
 				break;
-			
-			case UPDATE_COMPLETED:
-				setVisible(false);
-				dispose();
+
+				case UPDATE_COMPLETED:
+					setVisible(false);
+					dispose();
 				break;
-				
-			case ERROR_OCCURRED:
-				setVisible(false);
-				dispose();
+
+				case ERROR_OCCURRED:
+					setVisible(false);
+					dispose();
 				break;
-				
-			default:
-				new RuntimeException("Invalid type: "+ue.getType().toString());
+
+				default:
+					new RuntimeException("Invalid type: " + ue.getType().toString());
 			}
 		}
 		else
 		{
 			super.processEvent(event);
-		}
-	}
-	
-	public boolean isAlwaysDownload()
-	{
-		return automaticallyDownload.isSelected();
-	}
-	
-	public void setUpdateVersion(UpdateVersion version, UpdateRequest source)
-	{
-		this.version = version;
-		this.source = source;
-		
-		subtitle.setText(String.format(
-			"<html><b>A new version of %s is available!</b></html>",
-			source.getApplicationInfo().getSoftwareName()));
-		
-		String newVersion;
-		String currentVersion = source.getApplicationInfo().getVersion();
-		
-		if (version.getShortVersion() == null) {
-			newVersion = version.getVersion();
-		} else {
-			newVersion = version.getShortVersion() + " ("+version.getVersion()+")";
-			currentVersion += " ("+source.getComparableVersion()+")";
-		}
-		
-		versionInfo.setText(String.format(
-			"<html>%s %s is now available; you have version %s.<br>Do you wish to update now?</html>",
-			source.getApplicationInfo().getSoftwareName(),
-			newVersion,
-			currentVersion));
-		
-		try {
-			releaseNotes.setPage(version.getReleaseNotesLink());
-		} catch (IOException e) {
-			releaseNotes.setText("<html><h1>Error while opening the page</h1></html>");
 		}
 	}
 
@@ -210,5 +142,189 @@ public class UpdateAvailableDialog extends JDialog
 	{
 		return version;
 	}
-	
+
+	/**
+	 * This method is called from within the constructor to initialize the form.
+	 * WARNING: Do NOT modify this code. The content of this method is always
+	 * regenerated by the Form Editor.
+	 */
+	@SuppressWarnings("unchecked")
+	// <editor-fold defaultstate="collapsed"
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents()
+    {
+
+        subtitle = new javax.swing.JLabel();
+        versionInfo = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        releaseNotes = new javax.swing.JTextPane();
+        jLabel4 = new javax.swing.JLabel();
+        skipVersionButton = new javax.swing.JButton();
+        remindLaterButton = new javax.swing.JButton();
+        installButton = new javax.swing.JButton();
+        automaticallyDownload = new javax.swing.JCheckBox();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        subtitle.setText(".");
+
+        versionInfo.setText(".");
+
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane1.setViewportView(releaseNotes);
+
+        jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        jLabel4.setText("Release Notes:");
+        jPanel1.add(jLabel4, java.awt.BorderLayout.PAGE_START);
+
+        skipVersionButton.setText("Diese Version überspringen");
+        skipVersionButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                skipVersionButtonActionPerformed(evt);
+            }
+        });
+
+        remindLaterButton.setText("Später erinnern");
+        remindLaterButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                remindLaterButtonActionPerformed(evt);
+            }
+        });
+
+        installButton.setText("Installieren");
+
+        automaticallyDownload.setText("Updates in Zukunft automatisch installieren");
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(skipVersionButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                        .addComponent(remindLaterButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(installButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(subtitle)
+                            .addComponent(versionInfo)
+                            .addComponent(automaticallyDownload))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(subtitle)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(versionInfo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(automaticallyDownload)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(skipVersionButton)
+                    .addComponent(remindLaterButton)
+                    .addComponent(installButton))
+                .addContainerGap())
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+	private void skipVersionButtonActionPerformed(java.awt.event.ActionEvent evt)// GEN-FIRST:event_skipVersionButtonActionPerformed
+	{// GEN-HEADEREND:event_skipVersionButtonActionPerformed
+		dispose();
+	}// GEN-LAST:event_skipVersionButtonActionPerformed
+
+	private void remindLaterButtonActionPerformed(java.awt.event.ActionEvent evt)// GEN-FIRST:event_remindLaterButtonActionPerformed
+	{// GEN-HEADEREND:event_remindLaterButtonActionPerformed
+		dispose(); // TODO add your handling code here:
+	}// GEN-LAST:event_remindLaterButtonActionPerformed
+
+	/**
+	 * @param args
+	 *            the command line arguments
+	 */
+	public static void main(String args[])
+	{
+		/* Set the Nimbus look and feel */
+		// <editor-fold defaultstate="collapsed"
+		// desc=" Look and feel setting code (optional) ">
+		/*
+		 * If Nimbus (introduced in Java SE 6) is not available, stay with the
+		 * default look and feel. For details see
+		 * http://download.oracle.com/javase
+		 * /tutorial/uiswing/lookandfeel/plaf.html
+		 */
+		try
+		{
+			for(javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+			{
+				if ("Nimbus".equals(info.getName()))
+				{
+					javax.swing.UIManager.setLookAndFeel(info.getClassName());
+					break;
+				}
+			}
+		}catch (ClassNotFoundException ex)
+		{
+			java.util.logging.Logger.getLogger(UpdateAvailableDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+		}catch (InstantiationException ex)
+		{
+			java.util.logging.Logger.getLogger(UpdateAvailableDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+		}catch (IllegalAccessException ex)
+		{
+			java.util.logging.Logger.getLogger(UpdateAvailableDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+		}catch (javax.swing.UnsupportedLookAndFeelException ex)
+		{
+			java.util.logging.Logger.getLogger(UpdateAvailableDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+		}
+		// </editor-fold>
+
+		/* Create and display the dialog */
+		java.awt.EventQueue.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				UpdateAvailableDialog dialog = new UpdateAvailableDialog(new javax.swing.JFrame(), true);
+				dialog.addWindowListener(new java.awt.event.WindowAdapter()
+				{
+					@Override
+					public void windowClosing(java.awt.event.WindowEvent e)
+					{
+						System.exit(0);
+					}
+				});
+				dialog.setVisible(true);
+			}
+		});
+	}
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox automaticallyDownload;
+    private javax.swing.JButton installButton;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextPane releaseNotes;
+    private javax.swing.JButton remindLaterButton;
+    private javax.swing.JButton skipVersionButton;
+    private javax.swing.JLabel subtitle;
+    private javax.swing.JLabel versionInfo;
+    // End of variables declaration//GEN-END:variables
 }
