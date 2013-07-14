@@ -2,7 +2,10 @@ package barrysoft.twinkle;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.Authenticator;
 import java.net.MalformedURLException;
+import java.net.PasswordAuthentication;
 import java.net.URL;
 
 import barrysoft.application.ApplicationInfo;
@@ -30,17 +33,17 @@ public class Twinkle
 	 * 
 	 * @param appcastUrl The url to the appcast feed
 	 * 
-	 * @param appinfoUrl Url to the property file holding the
+	 * @param appinfo Inputstream to the property file holding the
 	 * 						application infos.
 	 */
 	
 	//TODO: It's just a quick hack for now
-	public void runUpdate(Class<?> main, String appcastUrl, String appinfoUrl)
+	public void runUpdate(Class<?> main, String appcastUrl, InputStream appinfo)
 	{
 		//Initialize the updater
 		Updater.getInstance();
 		
-		ApplicationInfo info = new ApplicationInfo(main.getResourceAsStream(appinfoUrl));
+		ApplicationInfo info = new ApplicationInfo(appinfo);
 		
 		final UpdateRequest r;
 		try

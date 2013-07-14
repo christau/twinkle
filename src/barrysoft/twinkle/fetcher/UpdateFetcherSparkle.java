@@ -5,8 +5,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.apache.log4j.Logger;
 
 import barrysoft.twinkle.UpdateException;
 import barrysoft.twinkle.UpdateVersion;
@@ -112,8 +113,7 @@ public class UpdateFetcherSparkle implements UpdateFetcher
 
 		if (entry.getEnclosures().isEmpty())
 		{
-			Logger.getLogger(getClass()).debug("No enclosure was specified for this " +
-					"AppCast, this is probably an error!");
+			Logger.getLogger(getClass().getName()).log(Level.INFO,"No enclosure was specified for this AppCast, this is probably an error!");
 			
 			return;
 		}

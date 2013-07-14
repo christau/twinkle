@@ -6,9 +6,9 @@ public class RestartersFactory
 {
 	public static Restarter getDefault() 
 	{
-		if (OSSpecific.isOSX())
-			return RestarterOSX.getInstance();
-		else
+//		if (OSSpecific.isOSX())
+//			return RestarterOSX.getInstance();
+//		else
 			return RestarterJar.getInstance();
 	}
 }

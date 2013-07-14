@@ -3,8 +3,8 @@ package barrysoft.twinkle.restarter;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-
-import org.apache.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RestarterOSX implements Restarter {
 
@@ -27,7 +27,7 @@ public class RestarterOSX implements Restarter {
 			getAppBundle(mainClass)
 		};
 		
-		Logger.getLogger(getClass()).debug("Restarter args: "+args);
+		Logger.getLogger(getClass().getName()).log(Level.INFO,"Restarter args: "+args);
 		
 		ProcessBuilder builder = new ProcessBuilder(args);
 		builder.directory(new File("."));

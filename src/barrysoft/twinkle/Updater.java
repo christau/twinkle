@@ -10,8 +10,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
-import org.apache.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import barrysoft.common.Observable;
 import barrysoft.resources.ResourcesManager;
@@ -145,8 +145,7 @@ public class Updater
 		try {
 			c = Class.forName(source.getMainClass());
 		} catch (ClassNotFoundException e) {
-			Logger.getLogger(getClass()).
-				error("Can't find main class '"+source.getMainClass()+"' to be restarted.");
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE,"Can't find main class '"+source.getMainClass()+"' to be restarted.");
 			return;
 		}
 		

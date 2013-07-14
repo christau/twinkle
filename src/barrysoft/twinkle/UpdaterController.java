@@ -1,8 +1,8 @@
 package barrysoft.twinkle;
 
 import java.io.File;
-
-import org.apache.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import barrysoft.twinkle.view.UpdaterView;
 import barrysoft.twinkle.view.UpdaterViewObserver;
@@ -68,7 +68,7 @@ public class UpdaterController implements UpdaterObserver, UpdaterViewObserver
 		if (displayVersion == null)
 			displayVersion = version.getVersion();
 		
-		Logger.getLogger(getClass()).debug(String.
+		Logger.getLogger(getClass().getName()).log(Level.INFO,String.
 				format("New version found *%s* - %s %s",
 				displayVersion, 
 				version.getDownloadUrl().toString(), 
@@ -79,13 +79,13 @@ public class UpdaterController implements UpdaterObserver, UpdaterViewObserver
 	
 	public void noUpdateRequired()
 	{
-		Logger.getLogger(getClass()).debug("Application is up to date");
+		Logger.getLogger(getClass().getName()).log(Level.INFO,"Application is up to date");
 		getView().noUpdateRequired();
 	}
 
 	public void downloadCompleted(UpdateVersion version)
 	{
-		Logger.getLogger(getClass()).debug("Update files download completed.");
+		Logger.getLogger(getClass().getName()).log(Level.INFO,"Update files download completed.");
 		getView().downloadCompleted(version);
 	}
 
@@ -96,7 +96,7 @@ public class UpdaterController implements UpdaterObserver, UpdaterViewObserver
 
 	public void downloadStarted(UpdateVersion version)
 	{
-		Logger.getLogger(getClass()).debug("Downloading update files...");
+		Logger.getLogger(getClass().getName()).log(Level.INFO,"Downloading update files...");
 		getView().downloadStarted(version);
 	}
 
@@ -112,9 +112,7 @@ public class UpdaterController implements UpdaterObserver, UpdaterViewObserver
 				catch (UpdateException e) 
 				{
 					view.updateError(e);
-					
-					if (Logger.getLogger(getClass()).isDebugEnabled())
-						e.printStackTrace();
+					e.printStackTrace();
 				}
 			}
 
