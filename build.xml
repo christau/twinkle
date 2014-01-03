@@ -46,6 +46,7 @@
 		description="Compile the Java sources to class files"> 
 
 		<javac srcdir="${project.source}" destdir="${project.bin}" classpathref="project.classpath" excludes="**/tests/**"/>
+		<copy file="src/rome.properties" todir="${project.bin}"/>
 
 	</target>
 
