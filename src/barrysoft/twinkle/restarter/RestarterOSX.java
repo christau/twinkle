@@ -6,6 +6,8 @@ import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import barrysoft.twinkle.UpdateRequest;
+
 public class RestarterOSX implements Restarter {
 
 	private final static RestarterOSX instance = new RestarterOSX();
@@ -19,7 +21,7 @@ public class RestarterOSX implements Restarter {
 	{
 	}
 	
-	public void restart(Class<?> mainClass)
+	public void restart(Class<?> mainClass, UpdateRequest req)
 	{
 		String [] args = new String[] {
 			"open",

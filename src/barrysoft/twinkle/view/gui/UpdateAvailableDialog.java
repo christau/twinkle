@@ -71,7 +71,7 @@ public class UpdateAvailableDialog extends javax.swing.JDialog
 			currentVersion += " (" + source.getComparableVersion() + ")";
 		}
 
-		versionInfo.setText(String.format("<html>%s %s ist Verf&uuml;gbar; Aktuelle Version ist %s.<br>Willst Du die Sofware Aktualisieren?</html>", source.getApplicationInfo().getSoftwareName(), newVersion, currentVersion));
+		versionInfo.setText(String.format("<html>%s %s ist Verf&uuml;gbar; Aktuelle Version ist %s.<br>Willst Du die Software Aktualisieren?</html>", source.getApplicationInfo().getSoftwareName(), newVersion, currentVersion));
 
 		try
 		{
@@ -154,16 +154,27 @@ public class UpdateAvailableDialog extends javax.swing.JDialog
     private void initComponents()
     {
 
+        automaticallyDownload = new javax.swing.JCheckBox();
+        skipVersionButton = new javax.swing.JButton();
         subtitle = new javax.swing.JLabel();
         versionInfo = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         releaseNotes = new javax.swing.JTextPane();
         jLabel4 = new javax.swing.JLabel();
-        skipVersionButton = new javax.swing.JButton();
         remindLaterButton = new javax.swing.JButton();
         installButton = new javax.swing.JButton();
-        automaticallyDownload = new javax.swing.JCheckBox();
+
+        automaticallyDownload.setText("Updates in Zukunft automatisch installieren");
+
+        skipVersionButton.setText("Diese Version überspringen");
+        skipVersionButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                skipVersionButtonActionPerformed(evt);
+            }
+        });
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -180,16 +191,7 @@ public class UpdateAvailableDialog extends javax.swing.JDialog
         jLabel4.setText("Release Notes:");
         jPanel1.add(jLabel4, java.awt.BorderLayout.PAGE_START);
 
-        skipVersionButton.setText("Diese Version überspringen");
-        skipVersionButton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                skipVersionButtonActionPerformed(evt);
-            }
-        });
-
-        remindLaterButton.setText("Später erinnern");
+        remindLaterButton.setText("Nicht Jetzt");
         remindLaterButton.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -200,28 +202,20 @@ public class UpdateAvailableDialog extends javax.swing.JDialog
 
         installButton.setText("Installieren");
 
-        automaticallyDownload.setText("Updates in Zukunft automatisch installieren");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(skipVersionButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                         .addComponent(remindLaterButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 288, Short.MAX_VALUE)
                         .addComponent(installButton))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(subtitle)
-                            .addComponent(versionInfo)
-                            .addComponent(automaticallyDownload))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(versionInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(subtitle, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -232,12 +226,9 @@ public class UpdateAvailableDialog extends javax.swing.JDialog
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(versionInfo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(automaticallyDownload)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(skipVersionButton)
                     .addComponent(remindLaterButton)
                     .addComponent(installButton))
                 .addContainerGap())

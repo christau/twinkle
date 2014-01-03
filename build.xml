@@ -45,7 +45,7 @@
 	<target name="compile" depends="version" 
 		description="Compile the Java sources to class files"> 
 
-		<javac srcdir="${project.source}" destdir="${project.bin}" classpathref="project.classpath"/>
+		<javac srcdir="${project.source}" destdir="${project.bin}" classpathref="project.classpath" excludes="**/tests/**"/>
 
 	</target>
 

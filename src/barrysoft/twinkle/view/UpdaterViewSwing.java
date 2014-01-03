@@ -58,7 +58,7 @@ public class UpdaterViewSwing implements UpdaterView
 		private static final long serialVersionUID = 0L;
 
 		{
-			putValue(Action.NAME, "Skip this version");
+			putValue(Action.NAME, "Nicht jetzt");
 		}
 
 		public void actionPerformed(ActionEvent e)
@@ -73,7 +73,7 @@ public class UpdaterViewSwing implements UpdaterView
 		private static final long serialVersionUID = -7773489410353949311L;
 
 		{
-			putValue(Action.NAME, "Cancel");
+			putValue(Action.NAME, "Abbrechen");
 		}
 		
 		public void actionPerformed(ActionEvent e)
@@ -184,7 +184,7 @@ public class UpdaterViewSwing implements UpdaterView
 		dispatcher.dispatch(UpdaterEventType.ERROR_OCCURRED, e);
 		
 		JOptionPane.showMessageDialog(null, e.getMessage(), 
-				"Error while updating", JOptionPane.ERROR_MESSAGE);
+				"Fehler während des Updates", JOptionPane.ERROR_MESSAGE);
 	}
 	
 	public void updateCompleted()
@@ -210,9 +210,7 @@ public class UpdaterViewSwing implements UpdaterView
 	
 	protected boolean askForRestart()
 	{
-		return (JOptionPane.showConfirmDialog(null, 
-				"To complete the update process the application must be restarted.\n"+
-				"Do you want to restart it now?",
-				"Restart Required", JOptionPane.YES_NO_OPTION) == 0);
+		JOptionPane.showConfirmDialog(null, "Anwendung wird jetzt neu gestartet.");
+		return true;
 	}
 }

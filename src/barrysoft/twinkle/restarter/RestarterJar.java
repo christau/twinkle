@@ -8,6 +8,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import barrysoft.twinkle.UpdateRequest;
+
 /**
  * A {@link Restarter} implementation that is able to restart
  * the JVM.
@@ -40,7 +42,7 @@ public class RestarterJar implements Restarter
 	 * 					that can be executed by the JVM
 	 */
 	
-	public void restart(Class<?> mainClass)
+	public void restart(Class<?> mainClass, UpdateRequest req)
 	{
 		List<String> args = buildJVMArgs(mainClass);
 		

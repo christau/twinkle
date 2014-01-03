@@ -3,15 +3,14 @@ package barrysoft.twinkle;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.net.Authenticator;
 import java.net.MalformedURLException;
-import java.net.PasswordAuthentication;
 import java.net.URL;
 
 import barrysoft.application.ApplicationInfo;
 import barrysoft.options.Options;
 import barrysoft.resources.ResourcesManager;
 import barrysoft.twinkle.UpdateRequest.VersionType;
+import barrysoft.twinkle.restarter.Restarter;
 import barrysoft.twinkle.view.UpdaterView;
 import barrysoft.twinkle.view.UpdaterViewSwing;
 
@@ -38,7 +37,7 @@ public class Twinkle
 	 */
 	
 	//TODO: It's just a quick hack for now
-	public void runUpdate(Class<?> main, String appcastUrl, InputStream appinfo)
+	public void runUpdate(Class<?> main, String appcastUrl, InputStream appinfo, Restarter restarter)
 	{
 		//Initialize the updater
 		Updater.getInstance();
@@ -54,8 +53,9 @@ public class Twinkle
 				info,
 				main.getCanonicalName(),
 				new URL(appcastUrl),
-				ResourcesManager.getResources().getWorkingDirectory(),
-				(File)null //TODO: Not using DSA Verification
+				new File(System.getProperty("java.io.tmpdir")),
+				(File)null, //TODO: Not using DSA Verification
+				restarter
 			);
 		}
 		catch (FileNotFoundException e)

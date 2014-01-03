@@ -1,5 +1,7 @@
 package barrysoft.twinkle.restarter;
 
+import barrysoft.twinkle.UpdateRequest;
+
 /**
  * Interface definition that must be implemented
  * by classes providing restart facilities.
@@ -15,5 +17,5 @@ public interface Restarter
 	 * 
 	 * @param mainClass The class to be re-launched
 	 */
-	void restart(Class<?> mainClass);
+	void restart(Class<?> mainClass, UpdateRequest req);
 }

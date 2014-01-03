@@ -18,11 +18,11 @@ import barrysoft.resources.ResourcesManager;
 import barrysoft.twinkle.archives.ArchiveHandler;
 import barrysoft.twinkle.archives.ArchiveHandlerManager;
 import barrysoft.twinkle.comparator.VersionComparator;
-import barrysoft.twinkle.comparator.VersionComparatorFactory;
 import barrysoft.twinkle.comparator.VersionComparator.ComparatorResult;
+import barrysoft.twinkle.comparator.VersionComparatorFactory;
 import barrysoft.twinkle.fetcher.UpdateFetcher;
 import barrysoft.twinkle.fetcher.UpdateFetchersFactory;
-import barrysoft.twinkle.restarter.RestartersFactory;
+import barrysoft.twinkle.restarter.RestarterJar;
 import barrysoft.twinkle.validator.UpdateValidator;
 import barrysoft.twinkle.validator.UpdateValidatorsManager;
 import barrysoft.web.ProgressEvent;
@@ -111,14 +111,14 @@ public class Updater
 		}
 		catch (InterruptedException e) 
 		{
-			throw new UpdateException("Error while updating.", e);
+			throw new UpdateException("Fehler während des Updates.", e);
 		} 
 		catch (ExecutionException e) 
 		{
 			if (e.getCause() != null && e.getCause() instanceof UpdateException)
 				throw (UpdateException)e.getCause();
 			
-			throw new UpdateException("Error while updating.", e);
+			throw new UpdateException("Fehler während des Updates.", e);
 		}
 		
 		clearCurrentDownloadFuture();
@@ -148,8 +148,19 @@ public class Updater
 			Logger.getLogger(getClass().getName()).log(Level.SEVERE,"Can't find main class '"+source.getMainClass()+"' to be restarted.");
 			return;
 		}
-		
-		RestartersFactory.getDefault().restart(c);
+		try
+		{
+			Class.forName(RestarterJar.class.getName());
+		}
+		catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+			System.exit(1);
+		}
+		if(source.getRestarter()==null)
+		RestarterJar.getInstance().restart(c, source);
+		else
+			source.getRestarter().restart(c,source);
 	}
 	
 	public boolean cancelUpdate()
