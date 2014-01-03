@@ -210,7 +210,7 @@ public class UpdaterViewSwing implements UpdaterView
 	
 	protected boolean askForRestart()
 	{
-		JOptionPane.showConfirmDialog(null, "Anwendung wird jetzt neu gestartet.");
+		JOptionPane.showMessageDialog(null, "Anwendung wird jetzt neu gestartet.");
 		return true;
 	}
 }
