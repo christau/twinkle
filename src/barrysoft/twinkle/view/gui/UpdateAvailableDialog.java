@@ -31,12 +31,14 @@ public class UpdateAvailableDialog extends javax.swing.JDialog
 	public UpdateAvailableDialog(java.awt.Frame parent, boolean modal)
 	{
 		super(parent, modal);
+		setAlwaysOnTop(true);
 		initComponents();
 	}
 
 	public UpdateAvailableDialog(Action install, Action skipVersion)
 	{
 		initComponents();
+		setAlwaysOnTop(true);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
 		enableEvents(GUIEvent.EVENT_ID);
