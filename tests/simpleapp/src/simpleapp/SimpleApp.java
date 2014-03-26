@@ -9,6 +9,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import barrysoft.twinkle.Twinkle;
+import barrysoft.twinkle.restarter.RestartersFactory;
+import barrysoft.twinkle.tests.updater.RestarterOSXTest;
 
 public class SimpleApp extends JFrame
 {
@@ -47,7 +49,7 @@ public class SimpleApp extends JFrame
 
 		Twinkle.getInstance().runUpdate(SimpleApp.class, 
 				"http://www.barrysoft.it/twinkle/simpleapp/appcast.xml",
-				"/simpleapp/infos.properties");
+				SimpleApp.class.getResourceAsStream("/simpleapp/infos.properties"),RestartersFactory.getDefault());
 		
 		app.setVisible(true);
 	}	
